@@ -305,23 +305,22 @@ public class PropertiesLauncher extends Launcher {
 		if (path == null) {
 			path = this.properties.getProperty(PATH);
 		}
-		if (path != null) {
-			this.paths = parsePathsProperty(SystemPropertyUtils.resolvePlaceholders(path));
-		}
+		this.paths = parsePathsProperty(SystemPropertyUtils.resolvePlaceholders(path));
 		this.logger.info("Nested archive paths: " + this.paths);
 	}
 
 	private List<String> parsePathsProperty(String commaSeparatedPaths) {
 		List<String> paths = new ArrayList<String>();
-		for (String path : commaSeparatedPaths.split(",")) {
-			path = cleanupPath(path);
-			// Empty path (i.e. the archive itself if running from a JAR) is always added
-			// to the classpath so no need for it to be explicitly listed
-			if (!path.equals("")) {
-				paths.add(path);
+		if(commaSeparatedPaths!=null){
+			for (String path : commaSeparatedPaths.split(",")) {
+				path = cleanupPath(path);
+				// Empty path (i.e. the archive itself if running from a JAR) is always added
+				// to the classpath so no need for it to be explicitly listed
+				if (!path.equals("")) {
+					paths.add(path);
+				}
 			}
-		}
-		if (paths.isEmpty()) {
+		} else {
 			paths.add("lib");
 		}
 		return paths;
